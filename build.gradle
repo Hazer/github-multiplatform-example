@@ -4,6 +4,9 @@ buildscript {
         google()
         maven { url "https://kotlin.bintray.com/kotlinx" }
         maven { url "https://dl.bintray.com/jetbrains/kotlin-native-dependencies" }
+        maven { url "https://dl.bintray.com/kotlin/ktor" }
+        mavenCentral()
+        gradlePluginPortal()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -14,11 +17,13 @@ buildscript {
 
 allprojects {
     repositories {
+    	maven { url "https://dl.bintray.com/kotlin/ktor" }
         jcenter()
         google()
+        mavenCentral()
         maven { url "https://kotlin.bintray.com/kotlinx" }
-        maven { url "https://dl.bintray.com/kotlin/ktor" }
         maven { url "https://dl.bintray.com/kodein-framework/Kodein-DI" }
         maven { url "https://dl.bintray.com/touchlabpublic/kotlin" }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     }
 }

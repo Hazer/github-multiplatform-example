@@ -15,7 +15,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation "com.jakewharton.timber:timber-common:$timber_version"
+                api "com.jakewharton.timber:timber-common:$timber_version"
                 implementation "io.ktor:ktor-client-core:$ktor_version"
                 implementation "io.ktor:ktor-client-json:$ktor_version"
                 implementation "org.jetbrains.kotlin:kotlin-stdlib"
@@ -37,7 +37,8 @@ kotlin {
         }
         iosMain {
             dependencies {
-                implementation "com.jakewharton.timber:timberNative:$timber_version"
+                implementation "com.jakewharton.timber:timberNative:5.0.0-k1.3.0-a1"
+                // implementation "com.jakewharton.timber:timber-common:$timber_version"
                 implementation "io.ktor:ktor-client-core-ios:$ktor_version"
                 implementation "io.ktor:ktor-client-ios:$ktor_version"
                 implementation "io.ktor:ktor-client-json-ios:$ktor_version"

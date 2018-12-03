@@ -8,6 +8,7 @@ import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ImplicitReflectionSerializer
 import java.util.ArrayList
@@ -48,29 +49,58 @@ class MainActivity : AppCompatActivity() {
 
         progressBar.visibility = View.VISIBLE
 
-        GitHubApiClient(username, password).repos(
-            successCallback = {
+        GlobalScope.launch {
+            try {
+                val repos = GitHubApiClient(username, password).repos()
+
                 uiScope.launch {
                     progressBar.visibility = View.GONE
 
-                    val reposListParcelable = it.map { repo ->
+                    val reposListParcelable = repos.map { repo ->
                         GitHubRepoParc(repo.name, repo.htmlUrl)
                     }
                     startActivity(Intent(this@MainActivity, ListActivity::class.java)
-                        .apply {
-                            putParcelableArrayListExtra(
-                                ListActivity.REPO_EXTRAS_KEY,
-                                reposListParcelable as ArrayList<out Parcelable>
-                            )
-                        })
+                            .apply {
+                                putParcelableArrayListExtra(
+                                        ListActivity.REPO_EXTRAS_KEY,
+                                        reposListParcelable as ArrayList<out Parcelable>
+                                )
+                            })
                 }
-            }, errorCallback = {
+            } catch (ex: Exception) {
                 uiScope.launch {
                     progressBar.visibility = View.GONE
 
                     errorText.visibility = View.VISIBLE
-                    errorText.text = "Request failed! Error: ${it.message ?: "unknown"}"
+                    errorText.text = "Request failed! Error: ${ex.message ?: "unknown"}"
                 }
-            })
+            }
+
+        }
+
+//        GitHubApiClient(username, password).repos(
+//            successCallback = {
+//                uiScope.launch {
+//                    progressBar.visibility = View.GONE
+//
+//                    val reposListParcelable = it.map { repo ->
+//                        GitHubRepoParc(repo.name, repo.htmlUrl)
+//                    }
+//                    startActivity(Intent(this@MainActivity, ListActivity::class.java)
+//                        .apply {
+//                            putParcelableArrayListExtra(
+//                                ListActivity.REPO_EXTRAS_KEY,
+//                                reposListParcelable as ArrayList<out Parcelable>
+//                            )
+//                        })
+//                }
+//            }, errorCallback = {
+//                uiScope.launch {
+//                    progressBar.visibility = View.GONE
+//
+//                    errorText.visibility = View.VISIBLE
+//                    errorText.text = "Request failed! Error: ${it.message ?: "unknown"}"
+//                }
+//            })
     }
 }

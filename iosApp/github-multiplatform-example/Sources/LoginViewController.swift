@@ -103,7 +103,7 @@ class LoginViewController: UIViewController {
                 self?.navigationController?.pushViewController(vc, animated: true)
 
                 return KotlinUnit()
-            }, errorCallback: { [weak self] error in
+            }, errorCallback: { [weak self] body, error in
                 self?.loaderView.stopAnimating()
                 self?.errorLabel.isHidden = false
 
