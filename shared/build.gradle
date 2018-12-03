@@ -4,7 +4,17 @@ apply plugin: "kotlinx-serialization"
 kotlin {
     targets {
         fromPreset(presets.jvm, "jvm")
+        
+        def iOSTarget = System.getenv('SDK_NAME')?.startsWith("iphoneos") \
+                              ? presets.iosArm64 : presets.iosX64
 
+        fromPreset(iOSTarget, 'ios') {
+            compilations.main.outputKinds('FRAMEWORK')
+            compilations.each {
+                it.extraOpts("-linkerOpts")
+            }
+        }
+        
         fromPreset(presets.iosX64, "ios_x86_64")
         fromPreset(presets.iosArm64, "ios_arm64")
         configure([ios_x86_64, ios_arm64]) {
